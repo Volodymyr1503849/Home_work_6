@@ -8,60 +8,56 @@ class Field:
     
 class Name(Field):
     def __init__(self, name):
-        self.name = name
+        self.value = name
 
 class Phone(Field):
-     def __init__(self, phone):
-        if len(phone) == 10:
-            self.phone = phone
+    def __init__(self, phone):
+        self.value = phone[-10:]
 
 class Record:
     def __init__(self, name):
         self.name = Name(name)
         self.phones = []
+
     def add_phone(self,phone):
-           self.phones.append(phone)
-    def remove_phone(self,phone):
-        if phone in self.phones:
-            self.phones.remove(phone)
-    def edit_phone(self,old_phone,new_phone):
-        try:
-            self.phones.remove(old_phone)
-            self.phones.append(new_phone)  
-        except ValueError:
-              print("Введіть коректні дані")
+        self.phones.append(Phone(phone))
+
     def find_phone(self,phone):
-          for i in self.phones:
-                if i == phone:
-                      return phone
-                else:
-                      return None  
-                    
+        for ph in self.phones:
+            if ph.value == phone:
+                return ph
+        return None
+       
+    def remove_phone(self,phone):
+        for ph in self.phones:
+            if ph.value == phone:
+                self.phones.remove(ph)
+
+    def edit_phone(self,old_phone,new_phone):
+        Record.remove_phone(self,old_phone)
+        Record.add_phone(self,new_phone)
+
+    def __str__(self):
+        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+
 class AddressBook(UserDict):
-    def add_record(self,Record):
-           self.data[Record.name.name] = Record.phones
-           return self.data   
+    def add_record(self,record):
+           self.data[record.name.value] = record
+
     def find(self,name):
-          for i in self.data:
-                if name == i :
-                    return name
-                else:
-                    return  None
+          for dict in self.data:
+              if dict == name:
+                  return self.data[name]
+              else:
+                  return None        
     def delete(self,name):
-        try:
-            del self.data[name]
-            return self.data
-        except:
-              None           
-    def __str__(self,Record):
-        return f"Contact name: {Record.name.name}, phones: {'; '.join(p for p in Record.phones)}"
-		
-book = AddressBook()
-phone_record = Phone("0663513021")
-john_record = Record("John")
-john_record.add_phone("0689688247")
-john_record.add_phone("0689645457")
-print(book.add_record(john_record))
-print(john_record.edit_phone("0689645457","0984602460"))
-found_phone = john_record.find_phone("0689688248")
-print(book.__str__(john_record))
+        del self.data[name] 
+              
+    def __str__(self):
+        a=""
+        for i in self.data:
+            a = a + f"{self.data[i]}" + "\n"
+        return a
+
+
+

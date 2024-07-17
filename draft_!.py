@@ -42,11 +42,8 @@ class Record:
                 if ph.value == old_phone:
                     self.remove_phone(old_phone)
                     self.add_phone(new_phone)
-                else:
-                    return None
         except ValueError:
-            print("Введіть коректні дані!") 
-                 
+            print("Введіть коректні дані!")      
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
 
@@ -66,7 +63,14 @@ class AddressBook(UserDict):
         for i in self.data:
             a = a + f"{self.data[i]}" + "\n"
         return a
-
+book = AddressBook()
+john_record = Record("John")
+john_record.add_phone("0673513021")
+john_record.add_phone("0984602460")
+john_record.add_phone("0689688247")
+print(john_record)
+print(john_record.edit_phone("06735130231","0672221169"))
+print(john_record)
 
 
 
